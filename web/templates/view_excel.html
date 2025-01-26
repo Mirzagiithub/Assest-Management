@@ -1,0 +1,59 @@
+{% extends "adminbase.html" %}
+
+{% block page_title %}
+    Manage Asset Information
+{% endblock page_title %}
+
+{% block body_block %}
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploaded Data</title>
+</head>
+<body>
+    <h1>Uploaded Data</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Sl No</th>
+                <th>Asset Type</th>
+                <th>Asset Name</th>
+                <th>Asset Identifier</th>
+                <th>Owner</th>
+                <th>Custodian</th>
+                <th>Assigned User</th>
+                <th>Asset Type Description</th>
+                <th>Asset Group</th>
+                <th>Location</th>
+                <th>Security Classification</th>
+                <th>AMC/Warranty End Date</th>
+                <th>Backup Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asset in assets %}
+            <tr>
+                <td>{{ asset.sl_no }}</td>
+                <td>{{ asset.asset_type }}</td>
+                <td>{{ asset.asset_name }}</td>
+                <td>{{ asset.asset_identifier }}</td>
+                <td>{{ asset.owner }}</td>
+                <td>{{ asset.custodian }}</td>
+                <td>{{ asset.user }}</td> <!-- Display the user -->
+                <td>{{ asset.asset_type_description }}</td>
+                <td>{{ asset.asset_group }}</td>
+                <td>{{ asset.asset_location }}</td>
+                <td>{{ asset.security_classification }}</td>
+                <td>{{ asset.amc_warranty_end_date }}</td>
+                <td>{{ asset.backup_location }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+
+
+{% endblock %}
