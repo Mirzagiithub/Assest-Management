@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+   <!--=============== REMIXICONS ===============-->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" crossorigin="" />
+
+   <!--=============== CSS ===============-->
+   <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}" />
+
+   <title>Login Form</title>
+</head>
+<body>
+   <div class="login">
+      <img class="login__bg" src="{% static 'assets/img/login-bg.png' %}" alt="Login Background" />
+
+      <form class="login__form" method="POST" action="{% url 'login_view' %}">
+         {% csrf_token %}
+         <h1 class="login__title">Login</h1>
+
+         <div class="login__inputs">
+            <div class="login__box">
+               <input class="login__input" type="text" placeholder="Email ID" name="email_or_username" required />
+               <i class="ri-mail-fill"></i>
+            </div>
+            <div class="login__box">
+               <input class="login__input" type="password" placeholder="Password" name="password" required />
+               <i class="ri-lock-2-fill"></i>
+            </div>
+         </div>
+
+         <div class="login__options">
+            <label class="login__checkbox">
+               <input type="checkbox" name="remember_me" />
+               <span>Keep me logged in</span>
+            </label>
+            <a href="#!" class="login__forgot">Forgot password?</a>
+         </div>
+
+         <button type="submit" class="login__button">Login</button>
+      </form>
+   </div>
+</body>
+</html>

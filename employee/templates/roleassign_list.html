@@ -1,0 +1,93 @@
+{% extends "adminbase.html" %}
+
+{% block page_title %}
+{% endblock page_title %}
+
+{% block body_block %}
+
+{% load static %}
+<style>
+    label {
+        font-weight: 700;
+    }
+    table thead tr {
+        background-color: #024467;
+        color: #fff;
+    }
+</style>
+
+<section class="content">
+    <div class="container-fluid">
+
+{% comment %} Display Messages {% endcomment %}
+{% if messages %}
+<div class="form-group">
+    <div class="col-12">
+        {% for message in messages %}
+            {% if message.tags == "error" %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% elif message.tags == "success" %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %} 
+
+<div class="container">
+    <a class="btn btn-warning" href="{% url 'assign_role' %}" role="button">+ New Role Assign </a> &nbsp;
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="bg-info text-white text-center col-10 cardstyle" style="margin-top: 5px; margin-bottom: 5px;">
+                    <h5 class="card-title">Role  Information</h5>
+                </div>
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap" id="myTable">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>User Name</th>
+                                <th>Role Name</th>
+                                <th>Status</th>
+                                <th>Created At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for role in roleassigns %}
+                                <tr>
+                                    <td>{{ role.id }}</td>
+                                    <td>{{ role.user.first_name }} {{ role.user.last_name }}</td>
+                                    <td>{{ role.role.role_name }}</td>
+                                    <td>{{ role.status }}</td>
+                                    <td>{{ role.created_at }}</td>
+                                    {% if role.status == 'A'  %}
+                                    <td><a href="{% url 'disable_roleassign' role.id  %}" class="btn btn-danger">Disable</a></td>
+                                    {% else %}
+                                    <td><a href="{% url 'enable_roleassign' role.id %}" class="btn btn-success">Enable</a></td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</section>
+
+{% endblock %}

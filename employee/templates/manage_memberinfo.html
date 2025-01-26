@@ -1,0 +1,321 @@
+{% extends "adminbase.html" %}
+
+{% block page_title %}
+{% endblock page_title %}
+
+{% block body_block %}
+{% load static %}
+
+<style>
+    label {
+        font-weight: 700;
+    }
+    table thead tr {
+        background-color: #024467;
+        color: #fff;
+    }
+</style>
+
+{% if request.path == '/manage_memberinfo/' %}
+    <section class="content">
+    <div class="container-fluid">
+        <a class="btn btn-info" href="{% url 'add_memberinfo' %}" role="button">+ New Member Information</a>&nbsp;
+        
+        <!-- Display messages -->
+        {% if messages %}
+            <div class="form-group">
+                <div class="col-12">
+                    {% for message in messages %}
+                        {% if message.tags == "error" %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% elif message.tags == "success" %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="bg-info text-white text-center col-10 cardstyle" style="margin-top: 5px; margin-bottom: 5px;">
+                        <h5 class="card-title">Member  Information</h5>
+                    </div>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Middle Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Group Member </th>
+                                    <th>Company Name</th>
+                                    <th>designation </th>
+                                    <th>short_desc </th>
+                                    <th>profile_image </th>
+                                    <th>social_link1 </th>
+                                    <th>social_link2 </th>
+                                    <th>social_link3 </th>
+                                    <th>social_link4 </th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ac in minfo %}
+                                    <tr>
+                                    <td>{{ ac.id }}</td>
+                                    <td>{{ ac.first_name }}</td>
+                                    <td>{{ ac.middle_name }}</td>
+                                    <td>{{ ac.last_name }}</td>
+                                    <td>{{ ac.email }}</td>
+                                    <td>{{ ac.phone }}</td>
+                                    <td>{{ ac.group_member.groupmember }}</td>
+                                    <td>{{ ac.company_name }}</td>
+                                    <td>{{ ac.designation }}</td>
+                                    <td>{{ ac.short_desc }}</td>
+                                    <td>{{ ac.profile_image }}</td>
+                                    <td>{{ ac.social_link1}}</td>
+                                    <td>{{ ac.social_link2 }}</td>
+                                    <td>{{ ac.social_link3}}</td>
+                                    <td>{{ ac.social_link4 }}</td>
+                                    <td>{{ ac.status }}</td>
+                                    {% if ac.status == 'T' %}
+                                    <td>
+                                        <a href="{% url 'edit_memberinfo' ac.id %}">
+                                            <img src="{% static 'img/edit.png' %}" style="width:35px;">
+                                        </a>
+                                        <a href="{% url 'disable_memberinfo' ac.id %}" class="btn btn-danger">Disable</a>                               
+
+                                    </td>
+                                {% else %}
+                                    <td><a href="{% url 'enable_memberinfo' ac.id %}" class="btn btn-success">Enable</a>                               
+                        </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    </section>
+{% else %}
+    <section class="content">
+    <div class="container-fluid">
+        <a class="btn btn-primary" href="{% url 'manage_memberinfo' %}" role="button" style="color: #fff;">Manage Member information</a> &nbsp;
+       
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header cardstyle" style="height: 50px; border-bottom: #fff;"></div>
+
+                    <!-- form start -->
+                    <div class="row justify-content-center" style="margin-top: 5px;">
+                        <div class="col-12 col-md-10 col-lg-10 pb-5 box-shadow">
+                            {% if request.path == '/add_memberinfo' %}
+                                <form role="form" method="POST" action="{% url 'add_memberinfo_save' %}" enctype="multipart/form-data">
+                            {% else %}
+                                <form role="form" method="POST" action="{% url 'edit_memberinfo_save' %}" enctype="multipart/form-data">
+                            {% endif %}
+                            <div class="card  rounded-0">
+                                <div class="card-header p-0">
+                                    <div class="text-white text-center py-2 cardstyle">
+                                        {% if request.path == '/add_memberinfo' %}
+                                            <h3 class="text-white"><i class="fa fa-address-card white_color"></i> Add Member Information </h3>
+                                            <p class="m-0 text-black">Provide the Necessary Information</p>
+                                        {% else %}
+                                            <h3 class="text-white"><i class="fas fa-address-card"></i> Update Member Information </h3>
+                                            <p class="m-0 text-black">Provide the Necessary Information</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% csrf_token %}
+                                {{ form.media.js }}
+                                {% comment %} Display Messages {% endcomment %}
+                                {% if messages %}
+                                <div class="form-group">
+                                    <div class="col-12">
+                                        {% for message in messages %}
+                                            {% if message.tags == "error" %}
+                                                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                                    {{ message }}
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            {% elif message.tags == "success" %}
+                                                <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                                    {{ message }}
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %} 
+                                <div class="card-body p-3">
+                                    <div class="row" style="margin-bottom:25px;">
+                                    <p class="m-0"><span style="color:#ff082d;">* Mark fields are mandatory</span></p>
+                                    </div>
+                                  <div class="row">
+                                    <div class="col-md-6">
+                                      <div class="form-group">
+                                        <div class="form-group mb-2">
+                                            <label>Enter First Name <span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                            {{ form.first_name }}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                          <div class="form-group mb-2">
+                                              <label>Enter Middle Name<span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                              {{ form.middle_name }}
+                                          </div>
+                                        </div>
+                                      </div> 
+                                     <div class="col-md-6">
+                                      <div class="form-group">
+                                        <div class="form-group mb-2">
+                                            <label>Enter Last Name<span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                            {{ form.last_name }}
+                                        </div>
+                                      </div>
+                                    </div> 
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                          <div class="form-group mb-2">
+                                              <label>Enter Email <span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                              {{ form.email }}
+                                          </div>
+                                        </div>
+                                      </div> 
+
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <div class="form-group mb-2">
+                                              <label>Enter Phone<span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                              {{ form.phone }}
+                                          </div>
+                                        </div>
+                                      </div> 
+                                      <div class="col-md-6">
+                                          <div class="form-group">
+                                            <div class="form-group mb-2">
+                                                <label>Select Group <span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                                {{ form.group_member }}
+                                            </div>
+                                          </div>
+                                        </div> 
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                              <div class="form-group mb-2">
+                                                  <label>Enter Company Name<span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                                  {{ form.company_name }}
+                                              </div>
+                                            </div>
+                                          </div> 
+                                          <div class="col-md-6">
+                                            <div class="form-group">
+                                              <div class="form-group mb-2">
+                                                  <label>Upload Profile Image <span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                                  {{ form.profile_image }}
+                                              </div>
+                                            </div>
+                                          </div> 
+                                          <div class="col-md-6">
+                                              <div class="form-group">
+                                                <div class="form-group mb-2">
+                                                    <label>Enter Designation <span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                                    {{ form.designation }}
+                                                </div>
+                                              </div>
+                                            </div> 
+
+                                           
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                      <div class="form-group mb-2">
+                                                          <label>Enter Facebook Link <span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                                          {{ form.social_link1 }}
+                                                      </div>
+                                                    </div>
+                                                  </div> 
+                                                  <div class="col-md-6">
+                                                    <div class="form-group">
+                                                      <div class="form-group mb-2">
+                                                          <label>Enter Twitter Link <span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                                          {{ form.social_link2 }}
+                                                      </div>
+                                                    </div>
+                                                  </div> 
+                                                  <div class="col-md-6">
+                                                    <div class="form-group">
+                                                      <div class="form-group mb-2">
+                                                          <label>Enter Linkedin Link <span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                                          {{ form.social_link3 }}
+                                                      </div>
+                                                    </div>
+                                                  </div> 
+                                                  <div class="col-md-6">
+                                                    <div class="form-group">
+                                                      <div class="form-group mb-2">
+                                                          <label>Enter Github Link <span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                                          {{ form.social_link4 }}
+                                                      </div>
+                                                    </div>
+                                                  </div> 
+                                                  <div class="col-md-12">
+                                                    <div class="form-group">
+                                                      <div class="form-group mb-2">
+                                                          <label>Enter Short Description<span style="color: #06964e;">()</span> <span style="color:#ff082d;"> * </span></label>
+                                                          {{ form.short_desc }}
+                                                      </div>
+                                                    </div>
+                                                  </div> 
+                                                 
+
+
+                                  </div>
+                                 
+                                 
+                           
+                               
+                                <div class="card-footer text-center">
+                                    {% if request.path == '/add_memberinfo' %}
+                                        <input type="submit" value="Add" class="btn btn-block rounded-50 py-2 cardstyle" style="color:#ffffff; font-weight: 900;">
+                                    {% else %}
+                                        <input type="submit" value="Update" class="btn btn-block rounded-50 py-2 cardstyle" style="color:#ffffff; font-weight: 900;">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    </section>
+{% endif %}
+{% endblock %}

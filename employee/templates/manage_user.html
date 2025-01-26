@@ -1,0 +1,90 @@
+{% extends "adminbase.html" %}
+
+{% block page_title %}
+{% endblock page_title %}
+
+{% block body_block %}
+
+{% load static %}
+
+<section class="content">
+    <div class="container-fluid">
+        <a class="btn-sm btn-info" href="{% url 'add_custom_user' %}" role="button">+ New User</a>&nbsp;
+        
+        <!-- Display messages -->
+        {% if messages %}
+            <div class="form-group">
+                <div class="col-12">
+                    {% for message in messages %}
+                        {% if message.tags == "error" %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% elif message.tags == "success" %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="bg-info text-white text-center col-10 cardstyle" style="margin-top: 5px; margin-bottom: 5px;">
+                        <h5 class="card-title">User Information</h5>
+                    </div>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>first Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>is Active</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.id }}</td>
+                                        <td>{{ user.username }}</td>
+                                        <td>{{ user.first_name }}</td>
+                                        <td>{{ user.last_name }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.is_active }}</td>
+                                     
+                                        <td>
+                                            <a href="{% url 'edit_custom_user' user.id %}">
+                                                    <img src="{% static 'img/edit.png' %}" style="width:35px;">
+                                                </a>
+                                                {% if user.is_active %}
+                                                    <a class="btn-sm btn-danger" href="{% url 'disable_custom_user' user.id %}">Disable</a>
+                                                {% else %}
+                                                    <a class="btn-sm btn-info" href="{% url 'enable_custom_user' user.id %}">Enable</a>
+                                                {% endif %}
+                                            </td>
+                                      
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    </section>
+
+{% endblock %}

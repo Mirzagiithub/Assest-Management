@@ -1,0 +1,179 @@
+{% extends "adminbase.html" %}
+
+{% block page_title %}
+{% endblock page_title %}
+
+{% block body_block %}
+{% load static %}
+
+<style>
+    label {
+        font-weight: 700;
+    }
+    table thead tr {
+        background-color: #024467;
+        color: #fff;
+    }
+</style>
+
+{% if request.path == '/manage_groupmember/' %}
+    <section class="content">
+    <div class="container-fluid">
+        <a class="btn btn-warning" href="{% url 'add_groupmember' %}" role="button">+ Group </a>&nbsp;
+        
+        <!-- Display messages -->
+        {% if messages %}
+            <div class="form-group">
+                <div class="col-12">
+                    {% for message in messages %}
+                        {% if message.tags == "error" %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% elif message.tags == "success" %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="bg-info text-white text-center col-10 cardstyle" style="margin-top: 5px; margin-bottom: 5px;">
+                        <h5 class="card-title">Group  Details Information</h5>
+                    </div>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Group Name</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ac in domain %}
+                                    <tr>
+                                        <td>{{ ac.id }}</td>
+                                        <td>{{ ac.groupmember }}</td>
+                                        <td>{{ ac.status }}</td>
+                                        <td>
+                                            {% if ac.status == 'T' %}
+                                                <a href="{% url 'edit_groupmember' ac.id %}">
+                                                    <img src="{% static 'img/edit.png' %}" style="width:35px;">
+                                                </a>
+                                                <a href="{% url 'disable_groupmember' ac.id %}" class="btn btn-danger">Disable</a>
+                                            {% else %}
+                                                <a href="{% url 'enable_groupmember' ac.id %}" class="btn btn-success">Enable</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    </section>
+{% else %}
+    <section class="content">
+    <div class="container-fluid">
+        <a class="btn btn-warning" href="{% url 'manage_groupmember' %}" role="button">Manage Banner </a> &nbsp;
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header cardstyle" style="height: 50px; border-bottom: #fff;"></div>
+
+                    <!-- form start -->
+                    <div class="row justify-content-center" style="margin-top: 5px;">
+                        <div class="col-12 col-md-10 col-lg-10 pb-5 box-shadow">
+                            {% if request.path == '/add_groupmember' %}
+                                <form role="form" method="POST" action="{% url 'add_groupmember_save' %}" enctype="multipart/form-data">
+                            {% else %}
+                                <form role="form" method="POST" action="{% url 'edit_groupmember_save' %}" enctype="multipart/form-data">
+                            {% endif %}
+                            <div class="card  rounded-0">
+                                <div class="card-header p-0">
+                                    <div class="text-white text-center py-2 cardstyle">
+                                        {% if request.path == '/add_groupmember' %}
+                                            <h3 class="text-white"><i class="fa fa-address-card white_color"></i> Add Group Information </h3>
+                                            <p class="m-0 text-black">Provide the Necessary Information</p>
+                                        {% else %}
+                                            <h3 class="text-white"><i class="fas fa-address-card"></i> Update Group Information </h3>
+                                            <p class="m-0 text-black">Provide the Necessary Information</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% csrf_token %}
+                                {{ form.media.js }}
+                                {% comment %} Display Messages {% endcomment %}
+                                {% if messages %}
+                                <div class="form-group">
+                                    <div class="col-12">
+                                        {% for message in messages %}
+                                            {% if message.tags == "error" %}
+                                                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                                    {{ message }}
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            {% elif message.tags == "success" %}
+                                                <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                                    {{ message }}
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %} 
+                                <div class="card-body">
+                                    <div class="row" style="margin-bottom: 25px;">
+                                        <p class="m-0"><span style="color:#ff082d;">* Mark fields are mandatory</span></p>
+                                    </div>
+                                    <div class="row">
+                                        
+                                        
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Enter Group Name <span style="color:#ff082d;">*</span></label>
+                                                {{ form.groupmember }}
+                                            </div>
+                                        </div>     
+                                        
+                                    </div>
+                                </div>
+                                <div class="card-footer text-center">
+                                    {% if request.path == '/add_groupmember' %}
+                                        <input type="submit" value="Add" class="btn btn-block rounded-50 py-2 cardstyle" style="color:#ffffff; font-weight: 900;">
+                                    {% else %}
+                                        <input type="submit" value="Update" class="btn btn-block rounded-50 py-2 cardstyle" style="color:#ffffff; font-weight: 900;">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+    </section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "adminbase.html" %}
+
+{% block page_title %}
+{% endblock page_title %}
+
+{% block body_block %}
+
+{% load static %}
+<section class="content">
+    <div class="container-fluid">
+
+        {% comment %} Display Messages {% endcomment %}
+        {% if messages %}
+        <div class="form-group">
+            <div class="col-12">
+                {% for message in messages %}
+                {% if message.tags == "error" %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% elif message.tags == "success" %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="container">
+            <a class="btn-sm btn-warning" href="{% url 'role_list' %}" role="button">Manage Role </a> &nbsp;
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header cardstyle" style="height: 50px; border-bottom: #fff;"></div>
+                        <div class="card-body">
+                            <div class="row" style="margin-bottom:25px;">
+                                <p class="m-0"><span style="color:#ff082d;">* Mark fields are mandatory</span></p>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <div class="card-footer text-center">
+
+                                    <input type="submit" value="Save Change" class="btn btn-primary rounded-50 py-2 "
+                                        style="color:#ffffff; font-weight: 900;">
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
