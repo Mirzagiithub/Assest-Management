@@ -1,0 +1,52 @@
+/*------------------------------------------------------------------
+    File Name: custom.css
+-------------------------------------------------------------------*/
+
+/** ADD YOUR AWESOME CODES HERE **/
+
+.cardstyle {
+
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgb(4, 150, 255) 50%, rgba(255, 255, 255, 1) 100%);
+}
+label{
+        font-weight: 700;
+  }
+.content{
+      margin-top: 100px;
+  }
+.card{
+      width:100%;
+      color: #000;
+      font-weight: 700;
+      
+  }
+.card-title{
+    color: #fff;
+}
+.card-body{
+    background-color: rgb(241, 243, 243);
+    
+}
+.card-header{
+    color:#fff
+}
+.box-shadow{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.text-white{
+    color: #fff;
+}
+.text-black{
+    color: #e8ce3f;
+}
+.row_bg{
+    background: #edeeee;
+    margin: 2px;
+}
+.table-hover tbody tr:hover,
+.table-hover tbody tr:focus {
+    background-color: #afd01e !important;
+    color: #000000;
+}
