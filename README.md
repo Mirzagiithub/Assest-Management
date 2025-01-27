@@ -1,8 +1,9 @@
 
-#Excel Data Upload and Bulk Insert
+## Excel Data Upload and Bulk Insert
+
 This project allows users to upload Excel files containing asset data, validate the contents, and bulk insert the data into a Django-based database. It handles missing values, parses date fields, and stores data in appropriate models based on the selected group. Efficient error handling ensures smooth operation even with incomplete or invalid data, skipping erroneous rows.
 
-Key Features:
+## Key Features:
 Upload and process Excel files
 Validate and fill missing data
 Parse dates correctly
@@ -13,46 +14,39 @@ Requirements:
 Django
 pandas
 Usage:
-Upload an Excel file through the form, and the data will be validated and stored in the corresponding database model.
+## Upload an Excel file through the form, and the data will be validated and stored in the corresponding database model.
 
 
-#How to Run the Project
-Prerequisites:
-Python 3.x: Ensure you have Python 3 installed.
-Django: Install Django using pip if you haven't already:
-bash
-Copy
-Edit
-pip install django
-pandas: Install pandas for handling Excel files:
-bash
-Copy
-Edit
-pip install pandas
-Database Setup: Make sure your Django database is configured correctly. You can use SQLite or another database like PostgreSQL or MySQL, depending on your setup.
-Steps to Run the Project:
-Clone the repository:
+## Install virtualenv inside vmspm directory
+$ pip install virtualenv
 
-bash
-Copy
-Edit
-git clone https://github.com/your-repository-url.git
-cd your-repository-name
-Install dependencies:
+## Create virtualenv inside this folder
+$ python -m venv env 
 
-bash
-Copy
-Edit
-pip install -r requirements.txt
-Apply migrations: If you haven't already applied migrations, run the following command to set up your database:
+## Then Activate the virtualenv
+##### $ .\env\Scripts\activate   -----> for Window
+##### $  source env/bin/activate  ----> for Linux
 
-bash
-Copy
-Edit
-python manage.py migrate
-Start the development server: To run the project locally, use the Django development server:
+## Install django and restframework 
+(env) $ pip install django , (env)  $ pip install djangorestframework
 
-bash
-Copy
-Edit
-python manage.py runserver
+## Create django project 
+(env)  $ django-admin startproject project_name
+
+## Change diectory to project_name
+(env)  $ cd project_name
+
+## MySQL database used so install mysqlclient
+(env) $ project_name> pip install mysqlclient
+
+## Then create migration file
+(env) $ project_name> python manage.py makemigrations
+
+## Then create tables in database
+(env) $ project_name> python manage.py migrate
+
+## Then create superuser
+(env) $ project_name> python manage.py createsuperuser
+
+## Runserver
+(env) $ project_name> python manage.py runserver
